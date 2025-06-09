@@ -241,6 +241,9 @@ function injectAppointmentsModal(results, dateObj) {
     align-items: center;
     justify-content: center;
     padding: 0;
+    z-index: 10; /* Ensure it's above other content */
+    pointer-events: auto;
+    transition: background 0.2s, color 0.2s;
   `;
   closeBtn.onmouseenter = () => {
     closeBtn.style.background = "#f3e5a6";
