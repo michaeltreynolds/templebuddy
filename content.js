@@ -107,7 +107,7 @@ function getTodayParts() {
   const now = new Date();
   return {
     year: now.getFullYear(),
-    month: now.getMonth() + 1,
+    month: now.getMonth(), // 0-based for API
     day: now.getDate()
   };
 }
@@ -151,13 +151,14 @@ async function showAvailableAppointments() {
 
     for (const session of data.sessionList) {
       const { sessionTime, appointmentType, details } = session;
-      // Only show if room is not full and online seats are available
-      if (!details.roomFull && details.onlineSeatsAvailable > 0 && (details.maleSeatsAvailable > 0 || details.femaleSeatsAvailable > 0)) {
+      const isRoomFull = !!details.roomFull;
+      const seatsAvailable = typeof details.seatsAvailable === "number" ? details.seatsAvailable : 0;
+
+      if (!isRoomFull && seatsAvailable > 0) {
         results.push({
           appointmentType,
           sessionTime,
-          maleSeats: details.maleSeatsAvailable > 0 ? details.maleSeatsAvailable : 0,
-          femaleSeats: details.femaleSeatsAvailable > 0 ? details.femaleSeatsAvailable : 0
+          seatsAvailable
         });
       }
     }
@@ -236,15 +237,13 @@ function injectAppointmentsModal(results) {
       <tr>
         <th style="text-align:left;padding:4px;">Type</th>
         <th style="text-align:left;padding:4px;">Time</th>
-        <th style="text-align:left;padding:4px;">Male Seats</th>
-        <th style="text-align:left;padding:4px;">Female Seats</th>
+        <th style="text-align:left;padding:4px;">Seats</th>
       </tr>
       ${results.map(r => `
         <tr>
           <td style="padding:4px;">${r.appointmentType.replace("PROXY_", "")}</td>
           <td style="padding:4px;">${r.sessionTime}</td>
-          <td style="padding:4px;">${r.maleSeats}</td>
-          <td style="padding:4px;">${r.femaleSeats}</td>
+          <td style="padding:4px;">${r.seatsAvailable}</td>
         </tr>
       `).join("")}
     `;
