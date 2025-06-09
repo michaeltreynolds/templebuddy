@@ -151,21 +151,13 @@ async function showAvailableAppointments() {
 
     for (const session of data.sessionList) {
       const { sessionTime, appointmentType, details } = session;
-      // Only show if room is not full and seats are available
-      if (!details.roomFull && details.onlineSeatsAvailable > 0 && details.maleSeatsAvailable > 0) {
+      // Only show if room is not full and online seats are available
+      if (!details.roomFull && details.onlineSeatsAvailable > 0 && (details.maleSeatsAvailable > 0 || details.femaleSeatsAvailable > 0)) {
         results.push({
           appointmentType,
           sessionTime,
-          seats: details.maleSeatsAvailable,
-          gender: "MALE"
-        });
-      }
-      if (!details.roomFull && details.onlineSeatsAvailable > 0 && details.femaleSeatsAvailable > 0) {
-        results.push({
-          appointmentType,
-          sessionTime,
-          seats: details.femaleSeatsAvailable,
-          gender: "FEMALE"
+          maleSeats: details.maleSeatsAvailable > 0 ? details.maleSeatsAvailable : 0,
+          femaleSeats: details.femaleSeatsAvailable > 0 ? details.femaleSeatsAvailable : 0
         });
       }
     }
@@ -244,15 +236,15 @@ function injectAppointmentsModal(results) {
       <tr>
         <th style="text-align:left;padding:4px;">Type</th>
         <th style="text-align:left;padding:4px;">Time</th>
-        <th style="text-align:left;padding:4px;">Seats</th>
-        <th style="text-align:left;padding:4px;">Gender</th>
+        <th style="text-align:left;padding:4px;">Male Seats</th>
+        <th style="text-align:left;padding:4px;">Female Seats</th>
       </tr>
       ${results.map(r => `
         <tr>
           <td style="padding:4px;">${r.appointmentType.replace("PROXY_", "")}</td>
           <td style="padding:4px;">${r.sessionTime}</td>
-          <td style="padding:4px;">${r.seats}</td>
-          <td style="padding:4px;">${r.gender}</td>
+          <td style="padding:4px;">${r.maleSeats}</td>
+          <td style="padding:4px;">${r.femaleSeats}</td>
         </tr>
       `).join("")}
     `;
