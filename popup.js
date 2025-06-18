@@ -24,6 +24,9 @@ chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
       templeDiv.appendChild(btn);
     });
   } else {
-    templeDiv.textContent = "Please navigate to the temple scheduling page.";
+    templeDiv.innerHTML = `
+      Please navigate to the <a href="https://temple-online-scheduling.churchofjesuschrist.org/" target="_blank" style="color:#b89c3c;text-decoration:underline;">temple scheduling page</a>.
+    `;
+    templeDiv.className = "error";
   }
 });

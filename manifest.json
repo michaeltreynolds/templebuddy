@@ -3,6 +3,11 @@
   "name": "Temple Buddy",
   "version": "1.0",
   "description": "Extends the usability of the temple scheduling webpage of The Church of Jesus Christ of Latter-day Saints.",
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/temple128.png"
+  },
   "permissions": [
     "storage"
   ],
